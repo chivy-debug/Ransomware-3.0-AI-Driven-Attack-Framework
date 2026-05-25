@@ -45,7 +45,7 @@ It comprises two core Go-based components: a **Command and Control (C2) server**
 
 - **Language:** Go (Golang)
 - **AI Backend:** [Ollama](https://ollama.com/) (local LLM runtime)
-- **Supported Models:** llama3, mistral, qwen2.5, and more
+- **Supported Models:** gpt-oss, llama3, gemma4, and more
 
 ---
 
@@ -56,7 +56,7 @@ It comprises two core Go-based components: a **Command and Control (C2) server**
 ### Why Ollama?
 
 - **Privacy & Isolation:** All LLM inference happens locally — no data leaves your machine.
-- **Model Flexibility:** Supports a wide range of open-source models (Llama 3, Mistral, Qwen 2.5, Gemma, etc.).
+- **Model Flexibility:** Supports a wide range of open-source models (GPT-OSS, Gemma 4, Llama 3, etc.).
 - **Simple REST API:** Exposes a lightweight HTTP API (`/api/generate`) that the Orchestrator communicates with directly.
 - **Low Latency:** Significantly faster response times compared to remote API calls, critical for real-time attack orchestration.
 
@@ -75,9 +75,8 @@ curl -fsSL https://ollama.com/install.sh | sh
 After installation, pull the LLM model you intend to use:
 
 ```bash
-ollama pull llama3       # Meta Llama 3 (recommended)
-ollama pull mistral      # Mistral 7B
-ollama pull qwen2.5      # Qwen 2.5
+ollama pull gpt-oss      # gpt-oss:latest
+ollama pull gemma4       # gemma4:latest
 ```
 
 ### Starting the Ollama Server
@@ -121,7 +120,7 @@ Before running the framework, open the source files and configure the LLM endpoi
 ```go
 OllamaAPI = "http://<IP>/api/generate"
 C2API     = "http://<IP>"
-Model     = "<MODEL LLM>" // e.g., llama3, mistral, qwen2.5, etc.
+Model     = "<MODEL LLM>" // e.g., gpt-oss:latest, gemma4:latest, etc.
 ```
 
 **3. Initialize Go Modules**
@@ -162,17 +161,6 @@ go run Orchestrator.go
 # Or build and run the executable
 go build -o orchestrator Orchestrator.go
 ./orchestrator
-```
-
----
-
-## 📁 Project Structure
-
-```
-Ransomware-3.0-AI-Driven-Attack-Framework/
-├── C2.go            # Command and Control (C2) server implementation
-├── Orchestrator.go  # Core attack orchestration logic, including AI/Ollama integration
-└── README.md        # Project documentation
 ```
 
 ---
@@ -232,14 +220,6 @@ The demo folder includes:
 - Full attack lifecycle walkthrough
 - C2 server & Orchestrator interaction
 - AI decision-making in real time
-
----
-
-## 📄 License
-
-This project is licensed under the LICENSE_NAME — see the `LICENSE` file for details.
-
-> **TODO:** Add a LICENSE file.
 
 ---
 
