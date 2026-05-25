@@ -49,12 +49,61 @@ It comprises two core Go-based components: a **Command and Control (C2) server**
 
 ---
 
+## 🦙 Ollama — Local LLM Runtime
+
+[Ollama](https://ollama.com/) is an open-source tool that allows you to run large language models (LLMs) **locally on your own machine**, without relying on external cloud APIs. It acts as the AI backbone of this framework, enabling the Orchestrator to make intelligent, adaptive decisions in real time during the attack simulation.
+
+### Why Ollama?
+
+- **Privacy & Isolation:** All LLM inference happens locally — no data leaves your machine.
+- **Model Flexibility:** Supports a wide range of open-source models (Llama 3, Mistral, Qwen 2.5, Gemma, etc.).
+- **Simple REST API:** Exposes a lightweight HTTP API (`/api/generate`) that the Orchestrator communicates with directly.
+- **Low Latency:** Significantly faster response times compared to remote API calls, critical for real-time attack orchestration.
+
+### Installing Ollama
+
+```bash
+# Linux / macOS
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Windows
+# Download the installer from: https://ollama.com/download
+```
+
+### Pulling a Model
+
+After installation, pull the LLM model you intend to use:
+
+```bash
+ollama pull llama3       # Meta Llama 3 (recommended)
+ollama pull mistral      # Mistral 7B
+ollama pull qwen2.5      # Qwen 2.5
+```
+
+### Starting the Ollama Server
+
+> ⚠️ **Ollama must be running before you execute any Go components.**
+
+```bash
+ollama serve
+```
+
+By default, Ollama listens on `http://localhost:11434`. Verify it is running:
+
+```bash
+curl http://localhost:11434/api/tags
+```
+
+You should see a JSON response listing your available local models.
+
+---
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - [Go (Golang)](https://go.dev/) version **1.16 or higher**
-- A running instance of **Ollama** (locally or hosted) with your choice of LLM
+- [Ollama](https://ollama.com/) installed and **running** with at least one model pulled
 
 ### Installation & Configuration
 
@@ -86,6 +135,13 @@ go mod tidy                                             # To download dependenci
 
 The framework consists of two main executable components. These are typically run as **separate processes**.
 
+> ⚠️ **Important:** You must start the Ollama server **before** running any Go component. The Orchestrator depends on a live Ollama instance to function.
+
+```bash
+# Step 0 — Start Ollama first (keep this terminal open)
+ollama serve
+```
+
 #### 1. Running the Command & Control (C2) Server
 
 ```bash
@@ -107,6 +163,18 @@ go run Orchestrator.go
 go build -o orchestrator Orchestrator.go
 ./orchestrator
 ```
+
+---
+
+## 📁 Project Structure
+
+```
+Ransomware-3.0-AI-Driven-Attack-Framework/
+├── C2.go            # Command and Control (C2) server implementation
+├── Orchestrator.go  # Core attack orchestration logic, including AI/Ollama integration
+└── README.md        # Project documentation
+```
+
 ---
 
 ## 🔧 Development
@@ -150,6 +218,28 @@ Please ensure any contributions align with the **ethical use guidelines** outlin
 3. Commit your changes: `git commit -m 'Add amazing feature'`
 4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a **Pull Request**
+
+---
+
+## 🎬 Video Demo
+
+Watch the framework in action — the demo videos cover end-to-end attack simulation, C2 communication, and AI-driven orchestration behavior.
+
+> 📁 **[View Demo Videos on Google Drive](https://drive.google.com/drive/folders/14krAfItgylRvVqQdn6-hku3I1BxKDWWM?usp=sharing)**
+
+The demo folder includes:
+
+- Full attack lifecycle walkthrough
+- C2 server & Orchestrator interaction
+- AI decision-making in real time
+
+---
+
+## 📄 License
+
+This project is licensed under the LICENSE_NAME — see the `LICENSE` file for details.
+
+> **TODO:** Add a LICENSE file.
 
 ---
 
